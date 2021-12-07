@@ -12,20 +12,17 @@ class AppReviewTests: XCTestCase {
     var userDefaults: UserDefaults!
     var manager: PreferenceDelegator!
     var sceneProvider: SceneProvider!
-    var appVersionHandler: AppVersionHandler!
     let lastRequestCountKey = "InstLastReviewRequestKey"
     let lastRequestappVersion = "InstLastReviewAppVersion"
     override func setUp() {
         userDefaults = UserDefaults.standard
-        appVersionHandler = AppVersionHandler()
         sceneProvider = SceneProvider()
         manager = ReviewPreferenceManger(userDfaults: userDefaults)
-        reviewHandler = AppStoreReviewController(preferenceManger: manager, sceneProvider: sceneProvider, versionHander: appVersionHandler)
+        reviewHandler = AppStoreReviewController(preferenceManger: manager, sceneProvider: sceneProvider, totalCountToShowReview: 4, currentVersion: "2.3")
     }
 
     override func tearDown() {
         userDefaults = nil
-        appVersionHandler = nil
         sceneProvider = nil
         manager = nil
         reviewHandler = nil
@@ -50,8 +47,8 @@ class AppReviewTests: XCTestCase {
     
     func test_only_update_Count_When_Its_newVersion() {
         let countBeforePopupCalled = manager.getCount(for: lastRequestCountKey)
-        let currentVersion = appVersionHandler.getCurrentAppVersion()
-        manager.updateAppVersion(versionToBeUpdated: currentVersion! + ".1", using: lastRequestappVersion )
+        let currentVersion = reviewHandler.currentVersion
+        manager.updateAppVersion(versionToBeUpdated: currentVersion + ".1", using: lastRequestappVersion )
         reviewHandler.showReviewPopUp()
         let count = manager.getCount(for: lastRequestCountKey)
         XCTAssertTrue(count == countBeforePopupCalled + 1, "count is not updated when its a new Version")
@@ -59,8 +56,8 @@ class AppReviewTests: XCTestCase {
     
     func test_app_is_not_Updating_Count_when_Its_not_A_New_Version() {
         let countBeforePopupCalled = manager.getCount(for: lastRequestCountKey)
-        let currentVersion = appVersionHandler.getCurrentAppVersion()
-        manager.updateAppVersion(versionToBeUpdated: currentVersion!, using: lastRequestappVersion )
+        let currentVersion = reviewHandler.currentVersion
+        manager.updateAppVersion(versionToBeUpdated: currentVersion, using: lastRequestappVersion )
         reviewHandler.showReviewPopUp()
         let count = manager.getCount(for: lastRequestCountKey)
         XCTAssertTrue(count == countBeforePopupCalled, "count is updated on the same versions")
@@ -68,8 +65,8 @@ class AppReviewTests: XCTestCase {
     
     func test_update_AppVersion_And_Reset_Count_Once_PopUp_Is_Shown() {
         let isEmpty: Int = 0
-        let currentVersion = appVersionHandler.getCurrentAppVersion()
-        manager.updateAppVersion(versionToBeUpdated: "\(currentVersion!)" + ".1", using: lastRequestappVersion)
+        let currentVersion = reviewHandler.currentVersion
+        manager.updateAppVersion(versionToBeUpdated: "\(currentVersion)" + ".1", using: lastRequestappVersion)
         manager.updateCount(count: 5, using: lastRequestCountKey)
         reviewHandler.showReviewPopUp()
         let newVersionSet =  manager.getLastVersionPromotedForReview(for: lastRequestappVersion)

@@ -13,4 +13,5 @@ public protocol AppReviewPresenter {
 
 public protocol ReviewHandler {
     func showReviewPopUp()
+    var currentVersion: String {get}
 }

@@ -13,13 +13,19 @@ class AppStoreReviewController: ReviewHandler {
     let lastRequestappVersion = "InstLastReviewAppVersion"
     let reviewPreferenceManger: PreferenceDelegator
     let sceneProvider: SceneProviderDelegator
-    let versionHander: AppVersionHandler
     let totalCountToShowReview: Int
-    public init(preferenceManger: PreferenceDelegator, sceneProvider: SceneProviderDelegator, versionHander: AppVersionHandler, totalCountToShowReview: Int) {
+    let version: String
+    
+    var currentVersion: String {
+        version
+    }
+    
+    
+    public init(preferenceManger: PreferenceDelegator, sceneProvider: SceneProviderDelegator, totalCountToShowReview: Int, currentVersion: String) {
         self.reviewPreferenceManger = preferenceManger
         self.sceneProvider = sceneProvider
-        self.versionHander = versionHander
         self.totalCountToShowReview = totalCountToShowReview
+        self.version = currentVersion
     }
 
     public func showReviewPopUp() {
@@ -28,7 +34,7 @@ class AppStoreReviewController: ReviewHandler {
     
     private func requestReviewIfNeeded() {
         let addValueToCount: Int = 1
-        guard let currentVersion = versionHander.getCurrentAppVersion() else {return}
+        let currentVersion =  self.version
         guard let previousVersion = reviewPreferenceManger.getLastVersionPromotedForReview(for: lastRequestappVersion) else {
             /*
              * means this is new user, so we should update count as well as save current version
