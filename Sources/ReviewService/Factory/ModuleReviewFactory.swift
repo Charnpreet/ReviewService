@@ -32,6 +32,8 @@ public protocol AppStoreReviewPresenterFactory {
 
 public class AppStoreReviewService: AppStoreReviewPresenterFactory {
 
+    public init () {}
+    
     private func getAppReviewPresenter(after reviewCountThreshold: Int, on currentVersion: String) -> AppReviewPresenter {
         let userDefaults = UserDefaults.standard
         let manager = ReviewPreferenceManger(userDfaults: userDefaults)
