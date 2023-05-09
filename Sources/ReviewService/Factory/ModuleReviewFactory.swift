@@ -12,7 +12,7 @@ public protocol ReviewModuleFactory {
     func  make(with countToshowReview: Int, currentVerion version: String) -> AppReviewPresenter
 }
 
-@available(*, deprecated, message: "Use ReviewService instead.")
+@available(*, deprecated, message: "Use AppStoreReviewService instead.")
 public final class ReviewFactory: ReviewModuleFactory {
     
     public init () {}
@@ -30,7 +30,7 @@ public protocol AppStoreReviewPresenterFactory {
     func showReviewPopup(after reviewCountThreshold: Int, on currentVersion: String)
 }
 
-public class ReviewService: AppStoreReviewPresenterFactory {
+public class AppStoreReviewService: AppStoreReviewPresenterFactory {
 
     private func getAppReviewPresenter(after reviewCountThreshold: Int, on currentVersion: String) -> AppReviewPresenter {
         let userDefaults = UserDefaults.standard
