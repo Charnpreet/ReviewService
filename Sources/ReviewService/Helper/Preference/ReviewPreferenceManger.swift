@@ -14,7 +14,7 @@ protocol PreferenceDelegator {
    func updateAppVersion(versionToBeUpdated version: String, using key: String)
 }
 
-final class ReviewPreferenceManger: PreferenceDelegator {
+class ReviewPreferenceManger: PreferenceDelegator {
    private let userDefaults: UserDefaults
     
     init(userDfaults: UserDefaults) {

@@ -8,7 +8,7 @@
 import Foundation
 import StoreKit
 
-final class AppStoreReviewController: ReviewHandler {
+ class AppStoreReviewController: ReviewHandler {
     let lastRequestCountKey = "InstLastReviewRequestKey"
     let lastRequestappVersion = "InstLastReviewAppVersion"
     let reviewPreferenceManger: PreferenceDelegator
