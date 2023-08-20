@@ -7,23 +7,22 @@
 
 import Foundation
 
-@available(*, deprecated, message: "Use AppStoreReviewPresenterFactory instead.")
+@available(*, deprecated, message: "Use AppStoreReviewService instead.")
 public protocol ReviewModuleFactory {
-    func  make(with countToshowReview: Int, currentVerion version: String) -> AppReviewPresenter
+    func make(with countToShowReview: Int, currentVersion version: String) -> AppReviewPresenter
 }
 
 @available(*, deprecated, message: "Use AppStoreReviewService instead.")
 public final class ReviewFactory: ReviewModuleFactory {
-    
-    public init () {}
-    public func make(with countToshowReview: Int, currentVerion version: String ) -> AppReviewPresenter {
-        let userDefaults = UserDefaults.standard
-        let manager = ReviewPreferenceManger(userDfaults: userDefaults)
+
+    public init() {}
+
+    public func make(with countToShowReview: Int, currentVersion version: String) -> AppReviewPresenter {
+        let manager = ReviewPreferenceManager()
         let sceneProvider = SceneProvider()
-        let reviewController = AppStoreReviewController(preferenceManger: manager, sceneProvider: sceneProvider, totalCountToShowReview: countToshowReview, currentVersion: version)
+        let reviewController = AppStoreReviewController(preferenceManager: manager, sceneProvider: sceneProvider, totalCountToShowReview: countToShowReview, currentVersion: version)
         return AppStoreReviews(appStoreController: reviewController)
-    
-   }
+    }
 }
 
 public protocol AppStoreReviewPresenterFactory {
@@ -32,19 +31,17 @@ public protocol AppStoreReviewPresenterFactory {
 
 public class AppStoreReviewService: AppStoreReviewPresenterFactory {
 
-    public init () {}
-    
-    private func getAppReviewPresenter(after reviewCountThreshold: Int, on currentVersion: String) -> AppReviewPresenter {
-        let userDefaults = UserDefaults.standard
-        let manager = ReviewPreferenceManger(userDfaults: userDefaults)
-        let sceneProvider = SceneProvider()
-        let reviewController = AppStoreReviewController(preferenceManger: manager, sceneProvider: sceneProvider, totalCountToShowReview: reviewCountThreshold, currentVersion: currentVersion)
-        return AppStoreReviews(appStoreController: reviewController)
+    public init() {}
 
-   }
+    private func getAppReviewPresenter(after reviewCountThreshold: Int, on currentVersion: String) -> AppReviewPresenter {
+        let manager = ReviewPreferenceManager()
+        let sceneProvider = SceneProvider()
+        let reviewController = AppStoreReviewController(preferenceManager: manager, sceneProvider: sceneProvider, totalCountToShowReview: reviewCountThreshold, currentVersion: currentVersion)
+        return AppStoreReviews(appStoreController: reviewController)
+    }
 
     public func showReviewPopup(after reviewCountThreshold: Int, on currentVersion: String) {
-          let presenter = getAppReviewPresenter(after: reviewCountThreshold, on: currentVersion)
+        let presenter = getAppReviewPresenter(after: reviewCountThreshold, on: currentVersion)
         presenter.presentReviewView()
     }
 }

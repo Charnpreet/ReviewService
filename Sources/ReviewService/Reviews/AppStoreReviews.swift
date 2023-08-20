@@ -7,6 +7,15 @@
 
 import Foundation
 
+public protocol AppReviewPresenter {
+    func presentReviewView()
+}
+
+public protocol ReviewHandler {
+    func showReviewPopUp()
+    var currentVersion: String {get}
+}
+
 /// review class to request automatic reviews at certains stage of your app
 /// ideally not at launch of an app or in between the tasks
 public final class AppStoreReviews: NSObject, AppReviewPresenter {
