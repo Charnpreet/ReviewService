@@ -22,25 +22,26 @@ public final class AppReviewManager: ReviewManager {
     }
 
     public func requestReviewIfAppropriate(countToShowReview: Int, currentVersion: String) {
-        let currentReviewCount = getCount(for: lastRequestCountKey)
-
-        if let lastVersionPromotedForReview = getLastVersionPromotedForReview(),
-           currentVersion != lastVersionPromotedForReview {
-            resetReviewCount()
+        guard getLastVersionPromotedForReview() != nil else {
+            incrementReviewCount()
             updateAppVersion(with: currentVersion)
             return
         }
 
-        if currentReviewCount >= countToShowReview {
-            requestReview()
-            resetReviewCount()
-        } else {
-            incrementReviewCount()
-        }
+        incrementReviewCount()
+        let updatedReviewCount = getCount(for: lastRequestCountKey) // Get the updated count
+        requestReviewIfNeeded(currentReviewCount: updatedReviewCount, countToShowReview: countToShowReview, currentVersion: currentVersion)
     }
 
     // MARK: - Private Helper Methods
 
+    internal func requestReviewIfNeeded(currentReviewCount: Int, countToShowReview: Int, currentVersion: String) {
+        if currentReviewCount >= countToShowReview {
+            requestReview()
+            resetReviewCount()
+            updateAppVersion(with: currentVersion)
+        }
+    }
     internal func getCount(for key: String) -> Int {
         return userDefaults.integer(forKey: key)
     }
