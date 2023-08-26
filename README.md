@@ -1,8 +1,10 @@
-README file for the `ReviewService` class:
+I understand now. Here's the consolidated content for the `README.md` file:
+
+---
 
 # ReviewService
 
-`ReviewService` is a simple library that provides a convenient way to show a review popup to the user after a certain number of app launches or visits to a specific section. It is implemented using the `App Store Review API` provided by Apple.
+`ReviewService` is a streamlined library designed to prompt users for reviews after a certain number of app launches or specific interactions. It leverages Apple's `App Store Review API` to provide a seamless experience.
 
 ## Installation
 
@@ -14,26 +16,64 @@ README file for the `ReviewService` class:
 
 ## Usage
 
-To use `ReviewService`, you first need to import the module:
+### SwiftUI
+
+To use `ReviewService` in a SwiftUI application:
+
+1. Import the module:
 
 ```swift
 import ReviewService
 ```
 
-Then, you can create an instance of the `ReviewService` class and call its `showReviewPopup` method, passing in the `reviewCountThreshold` and `currentVersion` parameters:
+2. Create an instance of the `ReviewService` and call the `requestReviewIfAppropriate` method within your SwiftUI view:
 
 ```swift
-let reviewService = ReviewService()
-reviewService.showReviewPopup(after: 4, on: "1.0.0")
+struct ContentView: View {
+    let reviewService = ReviewService()
+
+    var body: some View {
+        VStack {
+            // Your content here
+        }
+        .onAppear {
+            reviewService.requestReviewIfAppropriate(currentVersion: "1.0.0", countToShowReview: 4)
+        }
+    }
+}
 ```
 
-This will show the review popup to the user after the app has been launched or the specific section has been visited `4` times on the version `"1.0.0"`.
+### UIKit
 
+For UIKit applications:
 
-## Deprecation Notice
+1. Import the module:
 
-The `ReviewFactory` class has been deprecated in favor of the `ReviewService` class. Please update your code to use the new API.
+```swift
+import ReviewService
+```
+
+2. Instantiate the `ReviewService` class and call its `requestReviewIfAppropriate` method, typically in the `viewDidAppear` method of your view controller:
+
+```swift
+class ViewController: UIViewController {
+    let reviewService = ReviewService()
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        reviewService.requestReviewIfAppropriate(currentVersion: "1.0.0", countToShowReview: 4)
+    }
+}
+```
+
+## Simplified Architecture
+
+The new architecture of `ReviewService` focuses on simplicity and directness. By removing multiple layers of abstraction, the service is now more straightforward to use and maintain.
 
 ## License
 
-`ReviewService` is released under the MIT license. See `LICENSE` for details.
+`ReviewService` is released under the MIT license. Refer to the `LICENSE` file for more details.
+
+---
+
+You can copy the content above and save it as `README.md` in your `ReviewService` repository.
